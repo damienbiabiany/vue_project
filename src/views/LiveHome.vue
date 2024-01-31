@@ -41,7 +41,7 @@
 <script>
 
 // @ is an alias to /src
-//import axios from '@/services/axios.js'
+import axios from '@/services/axios.js'
 
 export default {
   name: 'live',
@@ -52,12 +52,22 @@ export default {
     }
   },
   mounted() {
+    this.fetchSelections();
   },
   components: {
   },
   methods: {
     goToLive: function (id) {
       this.$router.push(`/livedetails/${id}`);
+    },
+    fetchSelections() {
+      axios.get('/selections.json')
+        .then(response => {
+          this.lives = response.data;
+        })
+        .catch(error => {
+          console.error("Error fetching the selections:", error);
+        });
     }
   }
 }
