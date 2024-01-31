@@ -1,0 +1,16 @@
+[{
+  "id" : 1,
+  "name" : "PSG vs Unibet IT",
+  "startdate": "2022-02-15 21h00",
+  "nbMarkets": 47,
+  "nbSelections": 15,
+  "nbBets": 27
+},
+  {
+    "id" : 1,
+    "name" : "Inter vs Liverpool",
+    "startdate": "2022-02-15 21h00",
+    "nbMarkets": 42,
+    "nbSelections": 32,
+    "nbBets": 117
+  }]
