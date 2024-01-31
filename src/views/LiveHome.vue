@@ -47,8 +47,6 @@
 
 export default {
     name: 'live',
-    mounted() {
-    },
     data() {
       return {
         //TODO: fetch data using axios from local json (in directory public/json/events.json)
