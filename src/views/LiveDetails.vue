@@ -5,7 +5,7 @@
       Real Madris vs PSG (en cours)
     </div>
     <div class="card-body">
-      <p class="card-text">
+      <p class="card-text"></p>
       <div class="container">
         <h4>Résultat du match</h4>
         <div class="row">
@@ -83,7 +83,6 @@
                 </div>
               </div>
       </div>
-      </p>
       <router-link to="/lives" class="btn btn-light">Retour aux lives</router-link>
     </div>
   </div>

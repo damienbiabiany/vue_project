@@ -22,12 +22,10 @@
                 <li class="nav-item">
                   <router-link tag="a" class="nav-link" to="/lives">En direct</router-link>
                 </li>
-                </li>
               </ul>
             </div>
           </div>
         </nav>
-      </ul>
       </div>
 
     </div>
@@ -108,5 +106,3 @@ export default {
 .pulse {
   animation: shadow-pulse 1s infinite;
 }
-</style>
-</style>
