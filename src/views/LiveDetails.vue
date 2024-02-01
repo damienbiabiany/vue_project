@@ -148,7 +148,7 @@ export default {
           console.log(this.groupedByMarket(this.selections));
 
 
-          // Loop through this array with uniqueMarketNames keys
+          // Loop through this array with uniqueMarketNames keys  (TO DO)
           this.groupedByMarketArray = this.groupedByMarket(this.selections)
 
         })
