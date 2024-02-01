@@ -156,7 +156,17 @@ export default {
           console.error("Error fetching the selections:", error);
         });
     },
+    /*
+        The JSON data is stored in the data function under bets.
+        The groupedByMarket methods organizes this data by market names.
+     */
     groupedByMarket(data) {
+      /*
+        We use Array.prototype.reduce() to iterate over the data and accumulate the results into an object (acc).
+        For each item, we check if the market.name already exists as a key in our accumulator object. If it doesn't, we initialize it with an empty array.
+        We then push the current item into the array corresponding to its market name.
+        Finally, the function returns the accumulated object where each key is a unique market name and its value is an array of items.
+      */
       return data.reduce((acc, item) => {
         const marketName = item.market.name;
 
