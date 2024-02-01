@@ -4,12 +4,24 @@
     <div class="card-header bg-dark text-white pulse">
       {{ liveTitle }} (en cours)
 
-      {{ selections }}
-
-      <div v-if="selections.length > 0">
+      <!-- {{ selections }} -->
+      <!-- <div v-if="selections.length > 0">
         <div v-for="selection in selections" :key="selection.id">
         </div>
+      </div> -->
+
+      <div v-for="(items, category) in groupedByMarketArray" :key="category">
+        <h2>{{ category }}</h2>
+        <ul>
+          <li v-for="item in items" :key="item.id">
+            <p>Name: {{ item.name }}</p>
+            <p>Current Odd: {{ item.currentOdd }}</p>
+            <p>State: {{ item.state }}</p>
+            <!-- You can add more details as needed -->
+          </li>
+        </ul>
       </div>
+
 
     </div>
     <div class="card-body">
@@ -108,47 +120,53 @@ export default {
       //TODO: shoud be retrieved from json
       //  axios.get('/selections.json')
       selections: [],
+      filteredSelections: [],
       itemId: null,
       liveTitle: this.$route.params.name,
       groupedByMarketArray: {}
     }
   },
-  created() {
+  mounted() {
     this.fetchSelections();
     this.itemId = this.$route.params.id;
-    console.log("this.itemId             = ", this.itemId)
-    console.log("this.$route.params      = ", this.$route.params)
-  },
-  mounted() {
     this.liveTitle = this.$route.params.name
+  },
+  watch: {
+    // Watch for changes in route parameters
+    '$route.params.id': function (newId) {
+      this.itemId = newId;
+      this.fetchSelections();
+    }
   },
   methods: {
     fetchSelections() {
       axios.get('/selections.json')
         .then(response => {
           this.selections = response.data;
-          console.log("this.selections = ", this.selections)
 
-          /*
-            create an array marketNames containing all the market.name values from your JSON data. 
-            If you want to ensure that the array only contains unique values (no duplicates), you can modify the code like this:
-          */
+          if (this.selections && this.selections.length > 0) {
+            console.log('this.selections =', this.selections);
+            console.log('this.itemId     =', this.itemId);
 
-          // Filter selections to include only those with item.market.event.id value equals to the current live id
-           
-          const filteredSelections = this.selections.filter(item => item.market.event.id === this.itemId);
-          console.log('filteredSelections =', filteredSelections);
-          
-          const uniqueMarketNames = [...new Set(filteredSelections.map(item => item.market.name))];
-          console.log('uniqueMarketNames =', uniqueMarketNames);
+            // Filter selections to include only those with item.market.event.id value equals to the current live id
 
-          this.groupedByMarketArray = this.groupedByMarket(this.selections)
-          // console.log('this.groupedByMarketArray =', this.groupedByMarketArray);
+            this.filteredSelections = this.selections.filter(item => item.market.event.id === this.itemId);
+            console.log('this.filteredSelections  =', this.filteredSelections);
 
-          // Convert the JSON object to a JSON string
-          const jsonString = JSON.stringify(this.groupedByMarketArray, null, 2);
-          console.log(jsonString);
-          
+            // const uniqueMarketNames = [...new Set(filteredSelections.map(item => item.market.name))];
+            // console.log('uniqueMarketNames =', uniqueMarketNames);
+
+            this.groupedByMarketArray = this.groupedByMarket(this.filteredSelections)
+            console.log('this.groupedByMarketArray =', this.groupedByMarketArray);
+
+            // Convert the JSON object to a JSON string
+            const jsonString = JSON.stringify(this.groupedByMarketArray, null, 2);
+            console.log('jsonString =', jsonString);
+
+          } else {
+            this.filteredSelections = [];
+            this.groupedByMarketArray = {};
+          }
         })
         .catch(error => {
           console.error("Error fetching the selections:", error);
@@ -165,15 +183,11 @@ export default {
         We then push the current item into the array corresponding to its market name.
         Finally, the function returns the accumulated object where each key is a unique market name and its value is an array of items.
       */
-      console.log('data =', data)
-
       return data.reduce((acc, item) => {
         const marketName = item.market.name;
-        console.log('item =', item)
         if (!acc[marketName]) {
           acc[marketName] = [];
         }
-
         acc[marketName].push(item);
         return acc;
         /*    

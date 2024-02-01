@@ -318,5 +318,21 @@
         "startDate": "2022-01-29T13:41:15.125+00:00"
       }
     }
+  },
+  {
+    "id": 25,
+    "name": "Isma",
+    "currentOdd": 110.00,
+    "state": "OPENED",
+    "result": null,
+    "market": {
+      "id": 16,
+      "name": "Qui va marquer plus que Messi ?",
+      "event": {
+        "id": 2,
+        "name": "Inter vs Liverpool",
+        "startDate": "2022-01-29T13:41:15.125+00:00"
+      }
+    }
   }
 ]
