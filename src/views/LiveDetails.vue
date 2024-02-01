@@ -2,15 +2,15 @@
   <div class="card mt-5">
     <!-- TODO : this need be retrieved dynamically -->
     <div class="card-header bg-dark text-white pulse">
-      {{ liveTitle }} (en cours) 
-      
-      <div v-if="selections.length > 0">
-          <div v-for="selection in selections" :key="selection.id">
-            {{ selection.market.name }}
-            {{ selection.market.event.id }}
-            {{ itemId }}
+      {{ liveTitle }} (en cours)
 
-          </div>
+      <div v-if="selections.length > 0">
+        <div v-for="selection in selections" :key="selection.id">
+          {{ selection.market.name }}
+          {{ selection.market.event.id }}
+          {{ itemId }}
+
+        </div>
       </div>
 
     </div>
@@ -114,15 +114,16 @@ export default {
       liveTitle: this.$route.params.name
     }
   },
-       
+
   created() {
     this.fetchSelections();
-
     this.itemId = this.$route.params.id;
-    console.log("this.itemId      = ", this.itemId)
-    console.log("this.$route.params      = ",this.$route.params)
+    console.log("this.itemId             = ", this.itemId)
+    console.log("this.$route.params      = ", this.$route.params)
+
+
   },
-  mounted(){
+  mounted() {
   },
   methods: {
     fetchSelections() {
@@ -131,16 +132,43 @@ export default {
           this.selections = response.data;
           console.log("this.selections = ", this.selections)
 
+          /*
+            To extract all the market.name values from the provided JSON data, 
+            we can iterate through each object in the array and collect the market.name value from each one. 
+          */
+
+          const marketNames = this.selections.map(item => item.market.name);
+          console.log("marketNames =", marketNames);
+
+          /*
+            This code will create an array marketNames containing all the market.name values from your JSON data. 
+            If you want to ensure that the array only contains unique values (no duplicates), you can modify the code like this:
+          */
+
+          const uniqueMarketNames = [...new Set(this.selections.map(item => item.market.name))];
+          console.log(uniqueMarketNames);
+
+
+          console.log(this.groupedByMarket(this.selections));
+
         })
         .catch(error => {
           console.error("Error fetching the selections:", error);
         });
     },
-  },
-  computed:{
-        selectionsCurrentLive(){
-            return this.selections.find(selection => selection.market.event.id ===  this.itemId)
+    groupedByMarket(data) {
+      return data.reduce((acc, item) => {
+        const marketName = item.market.name;
+
+        if (!acc[marketName]) {
+          acc[marketName] = [];
         }
+
+        acc[marketName].push(item);
+
+        return acc;
+      });
+    }
   },
 }
 
