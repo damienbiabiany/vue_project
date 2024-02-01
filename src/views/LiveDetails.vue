@@ -4,8 +4,8 @@
     <div class="card-header bg-dark text-white pulse">
       {{ liveTitle }} (en cours)
 
-      <div v-if="selections.length > 0">
-        <div v-for="selection in selections" :key="selection.id">
+      <div v-if="groupedByMarketArray.length > 0">
+        <div v-for="selection in groupedByMarketArray" :key="selection.id">
           {{ selection.market.name }}
           {{ selection.market.event.id }}
           {{ itemId }}
@@ -147,6 +147,8 @@ export default {
 
           console.log(this.groupedByMarket(this.selections));
 
+
+          // Loop through this array with uniqueMarketNames keys
           this.groupedByMarketArray = this.groupedByMarket(this.selections)
 
         })
