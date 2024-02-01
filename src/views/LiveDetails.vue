@@ -4,12 +4,10 @@
     <div class="card-header bg-dark text-white pulse">
       {{ liveTitle }} (en cours)
 
-      <div v-if="groupedByMarketArray.length > 0">
-        <div v-for="selection in groupedByMarketArray" :key="selection.id">
-          {{ selection.market.name }}
-          {{ selection.market.event.id }}
-          {{ itemId }}
+      {{ selections }}
 
+      <div v-if="selections.length > 0">
+        <div v-for="selection in selections" :key="selection.id">
         </div>
       </div>
 
@@ -112,10 +110,9 @@ export default {
       selections: [],
       itemId: null,
       liveTitle: this.$route.params.name,
-      groupedByMarketArray:[] 
+      groupedByMarketArray: {}
     }
   },
-
   created() {
     this.fetchSelections();
     this.itemId = this.$route.params.id;
@@ -138,19 +135,20 @@ export default {
           */
 
           // Filter selections to include only those with item.market.event.id value equals to the current live id
-          const filteredSelections = this.selections.filter(item =>  item.market.event.id === this.itemId);
+           
+          const filteredSelections = this.selections.filter(item => item.market.event.id === this.itemId);
           console.log('filteredSelections =', filteredSelections);
-
+          
           const uniqueMarketNames = [...new Set(filteredSelections.map(item => item.market.name))];
           console.log('uniqueMarketNames =', uniqueMarketNames);
 
-
-          console.log(this.groupedByMarket(this.selections));
-
-
-          // Loop through this array with uniqueMarketNames keys  (TO DO)
           this.groupedByMarketArray = this.groupedByMarket(this.selections)
+          // console.log('this.groupedByMarketArray =', this.groupedByMarketArray);
 
+          // Convert the JSON object to a JSON string
+          const jsonString = JSON.stringify(this.groupedByMarketArray, null, 2);
+          console.log(jsonString);
+          
         })
         .catch(error => {
           console.error("Error fetching the selections:", error);
@@ -167,18 +165,23 @@ export default {
         We then push the current item into the array corresponding to its market name.
         Finally, the function returns the accumulated object where each key is a unique market name and its value is an array of items.
       */
+      console.log('data =', data)
+
       return data.reduce((acc, item) => {
         const marketName = item.market.name;
-
+        console.log('item =', item)
         if (!acc[marketName]) {
           acc[marketName] = [];
         }
 
         acc[marketName].push(item);
-
         return acc;
-      });
-    }
+        /*    
+          An empty object {} is passed as the second argument to reduce(). 
+          This ensures that acc (the accumulator) is initialized as an empty object.
+        */
+      }, {}); // Initial value set as an empty object
+    },
   },
 }
 
