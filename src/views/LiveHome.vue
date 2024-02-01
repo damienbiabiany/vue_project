@@ -59,10 +59,7 @@ export default {
   methods: {
     goToLive: function (id) {
       const live = this.lives.find(live => live.id === id)
-      console.log('liveName = ', live)
       this.$router.push({ name: 'livedetails', params: { id: id, name: live.name } });
-
-
     },
     fetchLives() {
       axios.get('/lives.json')

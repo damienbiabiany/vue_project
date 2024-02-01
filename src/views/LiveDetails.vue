@@ -2,7 +2,7 @@
   <div class="card mt-5">
     <!-- TODO : this need be retrieved dynamically -->
     <div class="card-header bg-dark text-white pulse">
-      Real Madris vs PSG (en cours)
+      {{ liveTitle }} (en cours) 
       
       <div v-if="selections.length > 0">
           <div v-for="selection in selections" :key="selection.id">
@@ -111,6 +111,7 @@ export default {
       //  axios.get('/selections.json')
       selections: [],
       itemId: null,
+      liveTitle: this.$route.params.name
     }
   },
        
@@ -118,8 +119,8 @@ export default {
     this.fetchSelections();
 
     this.itemId = this.$route.params.id;
-    console.log("this.itemId         = ", this.itemId)
-    console.log("this.$route.params  = ",this.$route.params)
+    console.log("this.itemId      = ", this.itemId)
+    console.log("this.$route.params      = ",this.$route.params)
   },
   mounted(){
   },
