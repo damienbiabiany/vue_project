@@ -22,11 +22,11 @@
               <h4 class="card-title font-weight-bold text-justify">{{ live.name }}</h4>
               <ul class="list-group text-justify text-center">
                 <li class="list-group-item">{{ live.nbMarkets }} marché(s) ouvert(s)</li>
-                <li class="list-group-item">{{ live.nbSelections }} selection(s) ouverte(s)</li>
+                <li class="list-group-item">{{ live.nbSelections }} sélection(s) ouverte(s)</li>
                 <li class="list-group-item">{{ live.nbBets }} pari(s) enregistré(s)</li>
               </ul>
               <a class="btn btn-primary mt-3" v-on:click="goToLive(live.id)"><span style="color:white">Parier sur
-                  {{ live.name }}</span></a>
+                  {{ live.name }} </span></a>
             </div>
           </div>
         </div>
@@ -52,21 +52,25 @@ export default {
     }
   },
   mounted() {
-    this.fetchSelections();
+    this.fetchLives();
   },
   components: {
   },
   methods: {
     goToLive: function (id) {
-      this.$router.push(`/livedetails/${id}`);
+      const live = this.lives.find(live => live.id === id)
+      console.log('liveName = ', live)
+      this.$router.push({ name: 'livedetails', params: { id: id, name: live.name } });
+
+
     },
-    fetchSelections() {
-      axios.get('/selections.json')
+    fetchLives() {
+      axios.get('/lives.json')
         .then(response => {
           this.lives = response.data;
         })
         .catch(error => {
-          console.error("Error fetching the selections:", error);
+          console.error("Error fetching the lives:", error);
         });
     }
   }
@@ -77,5 +81,7 @@ export default {
 
 <style scoped>
 .header-logo {
-  /*margin-left: -50%;*/
+  margin-left: -50%;
 }
+
+</style>

@@ -3,6 +3,16 @@
     <!-- TODO : this need be retrieved dynamically -->
     <div class="card-header bg-dark text-white pulse">
       Real Madris vs PSG (en cours)
+      
+      <div v-if="selections.length > 0">
+          <div v-for="selection in selections" :key="selection.id">
+            {{ selection.market.name }}
+            {{ selection.market.event.id }}
+            {{ itemId }}
+
+          </div>
+      </div>
+
     </div>
     <div class="card-body">
       <p class="card-text"></p>
@@ -34,26 +44,26 @@
         <br>
         <h4>Buteur</h4>
         <div class="row mt-1">
-            <div class="card bg-primary text-white h-100 col">
-              <div class="card-body">
-             D. Neymar : 1.3
-              </div>
+          <div class="card bg-primary text-white h-100 col">
+            <div class="card-body">
+              D. Neymar : 1.3
             </div>
-        </div>
-      <div class="row mt-1">
-        <div class="card bg-primary text-white h-100 col">
-          <div class="card-body">
-          K. Mbappe : 1.6
           </div>
         </div>
-      </div>
-      <div class="row mt-1">
-        <div class="card bg-primary text-white h-100 col">
-          <div class="card-body">
-          L. Messi : 1.3
+        <div class="row mt-1">
+          <div class="card bg-primary text-white h-100 col">
+            <div class="card-body">
+              K. Mbappe : 1.6
+            </div>
           </div>
         </div>
-      </div>
+        <div class="row mt-1">
+          <div class="card bg-primary text-white h-100 col">
+            <div class="card-body">
+              L. Messi : 1.3
+            </div>
+          </div>
+        </div>
         <div class="row mt-1">
           <div class="card bg-primary text-white h-100 col">
             <div class="card-body">
@@ -61,55 +71,76 @@
             </div>
           </div>
         </div>
-          <div class="row mt-1">
-            <div class="card bg-primary text-white h-100 col">
-              <div class="card-body">
-                E. Hasard : 2.5
-              </div>
+        <div class="row mt-1">
+          <div class="card bg-primary text-white h-100 col">
+            <div class="card-body">
+              E. Hasard : 2.5
             </div>
           </div>
-            <div class="row mt-1">
-              <div class="card bg-primary text-white h-100 col">
-                <div class="card-body">
-                  J. Vinicius : 1.8
-                </div>
-              </div>
+        </div>
+        <div class="row mt-1">
+          <div class="card bg-primary text-white h-100 col">
+            <div class="card-body">
+              J. Vinicius : 1.8
             </div>
-              <div class="row mt-1">
-                <div class="card bg-primary text-white h-100 col">
-                  <div class="card-body">
-                    M. Icardi : 1.9
-                  </div>
-                </div>
-              </div>
+          </div>
+        </div>
+        <div class="row mt-1">
+          <div class="card bg-primary text-white h-100 col">
+            <div class="card-body">
+              M. Icardi : 1.9
+            </div>
+          </div>
+        </div>
       </div>
       <router-link to="/lives" class="btn btn-light">Retour aux lives</router-link>
     </div>
   </div>
-
 </template>
 
 <script>
 
 // @ is an alias to /src
-//import axios from '@/services/axios.js'
+import axios from '@/services/axios.js'
 
 export default {
-    name: 'livedetails',
-    mounted() {
-
-    },
-    data() {
-        return {
-          //TODO: shoud be retrieved from json
-          //  axios.get('/selections.json')
-          selections : []
-        }
-    },
-   created(){
-   },
-    methods: {
+  name: 'livedetails',
+  data() {
+    return {
+      //TODO: shoud be retrieved from json
+      //  axios.get('/selections.json')
+      selections: [],
+      itemId: null,
     }
+  },
+       
+  created() {
+    this.fetchSelections();
+
+    this.itemId = this.$route.params.id;
+    console.log("this.itemId         = ", this.itemId)
+    console.log("this.$route.params  = ",this.$route.params)
+  },
+  mounted(){
+  },
+  methods: {
+    fetchSelections() {
+      axios.get('/selections.json')
+        .then(response => {
+          this.selections = response.data;
+          console.log("this.selections = ", this.selections)
+
+        })
+        .catch(error => {
+          console.error("Error fetching the selections:", error);
+        });
+    },
+  },
+  computed:{
+        selectionsCurrentLive(){
+            return this.selections.find(selection => selection.market.event.id ===  this.itemId)
+        }
+  },
 }
 
 </script>

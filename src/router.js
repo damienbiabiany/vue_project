@@ -19,7 +19,8 @@ const router =  new Router({
     {
       path: '/livedetails/:id',
       name: 'livedetails',
-      component: LiveDetails
+      component: LiveDetails,
+      props: route => ({...route.params, name: route.params.name}),
     }
   ]
 })
