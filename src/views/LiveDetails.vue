@@ -121,10 +121,9 @@ export default {
     this.itemId = this.$route.params.id;
     console.log("this.itemId             = ", this.itemId)
     console.log("this.$route.params      = ", this.$route.params)
-
-
   },
   mounted() {
+    this.liveTitle = this.$route.params.name
   },
   methods: {
     fetchSelections() {
@@ -134,20 +133,16 @@ export default {
           console.log("this.selections = ", this.selections)
 
           /*
-            To extract all the market.name values from the provided JSON data, 
-            we can iterate through each object in the array and collect the market.name value from each one. 
-          */
-
-          const marketNames = this.selections.map(item => item.market.name);
-          console.log("marketNames =", marketNames);
-
-          /*
-            This code will create an array marketNames containing all the market.name values from your JSON data. 
+            create an array marketNames containing all the market.name values from your JSON data. 
             If you want to ensure that the array only contains unique values (no duplicates), you can modify the code like this:
           */
 
-          const uniqueMarketNames = [...new Set(this.selections.map(item => item.market.name))];
-          console.log(uniqueMarketNames);
+          // Filter selections to include only those with item.market.event.id value equals to the current live id
+          const filteredSelections = this.selections.filter(item =>  item.market.event.id === this.itemId);
+          console.log('filteredSelections =', filteredSelections);
+
+          const uniqueMarketNames = [...new Set(filteredSelections.map(item => item.market.name))];
+          console.log('uniqueMarketNames =', uniqueMarketNames);
 
 
           console.log(this.groupedByMarket(this.selections));
