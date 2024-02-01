@@ -111,7 +111,8 @@ export default {
       //  axios.get('/selections.json')
       selections: [],
       itemId: null,
-      liveTitle: this.$route.params.name
+      liveTitle: this.$route.params.name,
+      groupedByMarketArray:[] 
     }
   },
 
@@ -150,6 +151,8 @@ export default {
 
 
           console.log(this.groupedByMarket(this.selections));
+
+          this.groupedByMarketArray = this.groupedByMarket(this.selections)
 
         })
         .catch(error => {
