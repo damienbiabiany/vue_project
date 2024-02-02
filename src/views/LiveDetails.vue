@@ -3,102 +3,29 @@
     <!-- TODO : this need be retrieved dynamically -->
     <div class="card-header bg-dark text-white pulse">
       {{ liveTitle }} (en cours)
-
-      <!-- {{ selections }} -->
-      <!-- <div v-if="selections.length > 0">
-        <div v-for="selection in selections" :key="selection.id">
-        </div>
-      </div> -->
-
-      <div v-for="(items, category) in groupedByMarketArray" :key="category">
-        <h2>{{ category }}</h2>
-        <ul>
-          <li v-for="item in items" :key="item.id">
-            <p>Name: {{ item.name }}</p>
-            <p>Current Odd: {{ item.currentOdd }}</p>
-            <p>State: {{ item.state }}</p>
-            <!-- You can add more details as needed -->
-          </li>
-        </ul>
-      </div>
-
-
     </div>
     <div class="card-body">
       <p class="card-text"></p>
+
       <div class="container">
-        <h4>Résultat du match</h4>
-        <div class="row">
-          <div class="col">
-            <div class="card bg-primary text-white h-100">
-              <div class="card-body">
-                <p class="card-text">Réal : 1.5</p>
+        <div v-for="(items, category) in groupedByMarketArray" :key="category">
+          <h4>{{ category }}</h4>
+          <div class="row" v-if="category === 'Résultat du match'">
+            <div class="col" v-for="item in items" :key="item.id">
+              <div class="card bg-primary text-white h-100">
+                <div class="card-body">
+                  <p class="card-text">{{ item.name }} : {{ item.currentOdd }}</p>
+                </div>
               </div>
             </div>
           </div>
-          <div class="col">
-            <div class="card bg-primary text-white h-100">
-              <div class="card-body">
-                <p class="card-text">Nul : 2.1</p>
+          <div v-else>
+            <div class="row mt-1" v-for="item in items" :key="item.id">
+              <div class="card bg-primary text-white h-100 col">
+                <div class="card-body">
+                  {{ item.name }} : {{ item.currentOdd }}
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card bg-primary text-white h-100">
-              <div class="card-body">
-                <p class="card-text">Psg : 1.7</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <br>
-        <h4>Buteur</h4>
-        <div class="row mt-1">
-          <div class="card bg-primary text-white h-100 col">
-            <div class="card-body">
-              D. Neymar : 1.3
-            </div>
-          </div>
-        </div>
-        <div class="row mt-1">
-          <div class="card bg-primary text-white h-100 col">
-            <div class="card-body">
-              K. Mbappe : 1.6
-            </div>
-          </div>
-        </div>
-        <div class="row mt-1">
-          <div class="card bg-primary text-white h-100 col">
-            <div class="card-body">
-              L. Messi : 1.3
-            </div>
-          </div>
-        </div>
-        <div class="row mt-1">
-          <div class="card bg-primary text-white h-100 col">
-            <div class="card-body">
-              K. Benzema : 1.5
-            </div>
-          </div>
-        </div>
-        <div class="row mt-1">
-          <div class="card bg-primary text-white h-100 col">
-            <div class="card-body">
-              E. Hasard : 2.5
-            </div>
-          </div>
-        </div>
-        <div class="row mt-1">
-          <div class="card bg-primary text-white h-100 col">
-            <div class="card-body">
-              J. Vinicius : 1.8
-            </div>
-          </div>
-        </div>
-        <div class="row mt-1">
-          <div class="card bg-primary text-white h-100 col">
-            <div class="card-body">
-              M. Icardi : 1.9
             </div>
           </div>
         </div>
@@ -132,10 +59,11 @@ export default {
     this.liveTitle = this.$route.params.name
   },
   watch: {
-    // Watch for changes in route parameters
-    '$route.params.id': function (newId) {
-      this.itemId = newId;
-      this.fetchSelections();
+    '$route': function (to, from) {
+      if (to.params.id !== from.params.id) {
+        this.itemId = to.params.id;
+        this.fetchSelections();
+      }
     }
   },
   methods: {

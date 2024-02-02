@@ -7,6 +7,10 @@
 .vue-logo-back {
   background-color: black;
 }
+
+.card {
+  text-align: center;
+}
 </style>
 
 <template>
@@ -15,7 +19,7 @@
       <div class="card-header bg-dark text-white pulse">
         <h4>Live(s) en cours <span class="badge bg-danger">{{ lives.length }}</span></h4>
       </div>
-      <div class="card-body">
+      <div class="card-body mx-auto">
         <div class="card-text">
           <div class="card centeralign addmargin" style="width: 18rem;" v-for="live in lives" :key="live.id">
             <div class="card-body" v-on:click="goToLive(live.id)">
