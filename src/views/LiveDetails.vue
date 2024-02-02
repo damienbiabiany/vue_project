@@ -54,6 +54,7 @@ export default {
   },
   mounted() {
     this.fetchSelections();
+    this.itemId = this.$route.params.id;
   },
   methods: {
     fetchSelections() {
@@ -68,11 +69,11 @@ export default {
               console.log('this.itemId      =', this.itemId);
 
               // Filter selections to include only those with item.market.event.id value equals to the current live id
-              this.filteredSelections = this.selections.filter(item => item.market.event.id === 2);
+              this.filteredSelections = this.selections.filter(item => item.market.event.id === this.itemId);
               console.log('this.filteredSelections  =', this.filteredSelections);
 
-              // const uniqueMarketNames = [...new Set(filteredSelections.map(item => item.market.name))];
-              // console.log('uniqueMarketNames =', uniqueMarketNames);
+              const uniqueMarketNames = [...new Set(this.filteredSelections.map(item => item.market.event.name))];
+              console.log('uniqueMarketNames =', uniqueMarketNames[0]);
 
               this.groupedByMarketArray = this.groupedByMarket(this.filteredSelections)
               console.log('this.groupedByMarketArray =', this.groupedByMarketArray);
@@ -89,13 +90,12 @@ export default {
           .catch(error => {
             console.error("Error fetching the selections:", error);
           });
-
       }
     },
     /*
         The JSON data is stored in the data function under bets.
         The groupedByMarket methods organizes this data by market names.
-     */
+    */
     groupedByMarket(data) {
       /*
         We use Array.prototype.reduce() to iterate over the data and accumulate the results into an object (acc).
