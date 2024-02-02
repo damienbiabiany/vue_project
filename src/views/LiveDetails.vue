@@ -1,20 +1,20 @@
 <template>
   <div class="card mt-5">
     <!-- TODO : this need be retrieved dynamically -->
-    <div class="card-header bg-dark text-white pulse">
-      {{ liveTitle }} (en cours)
+    <div class="card-header bg-dark text-white pulse text-center">
+      <h2>{{ liveTitle }} (en cours)</h2>
     </div>
     <div class="card-body">
       <p class="card-text"></p>
 
       <div class="container">
-        <div v-for="(items, category) in groupedByMarketArray" :key="category">
-          <h4>{{ category }}</h4>
+        <div class="mt-2" v-for="(items, category) in groupedByMarketArray" :key="category">
+          <h4 class="text-center">{{ category }}</h4>
           <div class="row" v-if="category === 'Résultat du match'">
-            <div class="col" v-for="item in items" :key="item.id">
+            <div class="col" v-for="item in  sortedMatchResults(items)" :key="item.id">
               <div class="card bg-primary text-white h-100">
                 <div class="card-body">
-                  <p class="card-text">{{ item.name }} : {{ item.currentOdd }}</p>
+                  <p class="card-text text-center">{{ item.name }} : {{ item.currentOdd }}</p>
                 </div>
               </div>
             </div>
@@ -22,7 +22,7 @@
           <div v-else>
             <div class="row mt-1" v-for="item in items" :key="item.id">
               <div class="card bg-primary text-white h-100 col">
-                <div class="card-body">
+                <div class="card-body text-center">
                   {{ item.name }} : {{ item.currentOdd }}
                 </div>
               </div>
@@ -58,14 +58,6 @@ export default {
     this.itemId = this.$route.params.id;
     this.liveTitle = this.$route.params.name
   },
-  watch: {
-    '$route': function (to, from) {
-      if (to.params.id !== from.params.id) {
-        this.itemId = to.params.id;
-        this.fetchSelections();
-      }
-    }
-  },
   methods: {
     fetchSelections() {
       axios.get('/selections.json')
@@ -73,11 +65,7 @@ export default {
           this.selections = response.data;
 
           if (this.selections && this.selections.length > 0) {
-            console.log('this.selections =', this.selections);
-            console.log('this.itemId     =', this.itemId);
-
             // Filter selections to include only those with item.market.event.id value equals to the current live id
-
             this.filteredSelections = this.selections.filter(item => item.market.event.id === this.itemId);
             console.log('this.filteredSelections  =', this.filteredSelections);
 
@@ -124,6 +112,19 @@ export default {
         */
       }, {}); // Initial value set as an empty object
     },
+    sortedMatchResults(matchResults) {
+      // Find the "Match Nul" object
+      const matchNul = matchResults.find(result => result.name === 'Match Nul');
+      const otherResults = matchResults.filter(result => result.name !== 'Match Nul');
+
+      // Calculate the middle index
+      const middleIndex = Math.floor(otherResults.length / 2);
+
+      // Insert "Match Nul" into the middle of the array
+      otherResults.splice(middleIndex, 0, matchNul);
+
+      return otherResults;
+    }
   },
 }
 

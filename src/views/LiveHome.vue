@@ -23,7 +23,7 @@
         <div class="card-text">
           <div class="card centeralign addmargin" style="width: 18rem;" v-for="live in lives" :key="live.id">
             <div class="card-body" v-on:click="goToLive(live.id)">
-              <h4 class="card-title font-weight-bold text-justify">{{ live.name }}</h4>
+              <h4 class="card-title font-weight-bold">{{ live.name }}</h4>
               <ul class="list-group text-justify text-center">
                 <li class="list-group-item">{{ live.nbMarkets }} marché(s) ouvert(s)</li>
                 <li class="list-group-item">{{ live.nbSelections }} sélection(s) ouverte(s)</li>
