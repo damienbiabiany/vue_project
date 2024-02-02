@@ -6,7 +6,6 @@
     </div>
     <div class="card-body">
       <p class="card-text"></p>
-
       <div class="container">
         <div class="mt-2" v-for="(items, category) in groupedByMarketArray" :key="category">
           <h4 class="text-center">{{ category }}</h4>
