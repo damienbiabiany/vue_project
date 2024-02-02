@@ -47,45 +47,50 @@ export default {
       //  axios.get('/selections.json')
       selections: [],
       filteredSelections: [],
-      itemId: null,
+      itemId: this.$route.params.id,
       liveTitle: this.$route.params.name,
       groupedByMarketArray: {}
     }
   },
   mounted() {
     this.fetchSelections();
-    this.itemId = this.$route.params.id;
-    this.liveTitle = this.$route.params.name
   },
   methods: {
     fetchSelections() {
-      axios.get('/selections.json')
-        .then(response => {
-          this.selections = response.data;
+      // Check if this.itemId exists and is an integer
+      if (this.itemId && Number.isInteger(parseInt(this.itemId))) {
+        axios.get('/selections.json')
+          .then(response => {
+            this.selections = response.data;
 
-          if (this.selections && this.selections.length > 0) {
-            // Filter selections to include only those with item.market.event.id value equals to the current live id
-            this.filteredSelections = this.selections.filter(item => item.market.event.id === this.itemId);
-            console.log('this.filteredSelections  =', this.filteredSelections);
+            if (this.selections && this.selections.length > 0) {
+              console.log('this.selections  =', this.selections);
+              console.log('this.itemId      =', this.itemId);
 
-            // const uniqueMarketNames = [...new Set(filteredSelections.map(item => item.market.name))];
-            // console.log('uniqueMarketNames =', uniqueMarketNames);
+              // Filter selections to include only those with item.market.event.id value equals to the current live id
+              this.filteredSelections = this.selections.filter(item => item.market.event.id === 2);
+              console.log('this.filteredSelections  =', this.filteredSelections);
 
-            this.groupedByMarketArray = this.groupedByMarket(this.filteredSelections)
-            console.log('this.groupedByMarketArray =', this.groupedByMarketArray);
+              // const uniqueMarketNames = [...new Set(filteredSelections.map(item => item.market.name))];
+              // console.log('uniqueMarketNames =', uniqueMarketNames);
 
-            // Convert the JSON object to a JSON string
-            const jsonString = JSON.stringify(this.groupedByMarketArray, null, 2);
-            console.log('jsonString =', jsonString);
+              this.groupedByMarketArray = this.groupedByMarket(this.filteredSelections)
+              console.log('this.groupedByMarketArray =', this.groupedByMarketArray);
 
-          } else {
-            this.filteredSelections = [];
-            this.groupedByMarketArray = {};
-          }
-        })
-        .catch(error => {
-          console.error("Error fetching the selections:", error);
-        });
+              // Convert the JSON object to a JSON string
+              const jsonString = JSON.stringify(this.groupedByMarketArray, null, 2);
+              console.log('jsonString =', jsonString);
+
+            } else {
+              this.filteredSelections = [];
+              this.groupedByMarketArray = {};
+            }
+          })
+          .catch(error => {
+            console.error("Error fetching the selections:", error);
+          });
+
+      }
     },
     /*
         The JSON data is stored in the data function under bets.
